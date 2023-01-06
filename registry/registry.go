@@ -275,6 +275,16 @@ func (r *registry) Load(target string) error{
 	if err != nil {
 		return err
 	}
+
+	defer func() {
+		// stop the instance
+		fmt.Println("stop the instance")
+		err=r.Stop()
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		removeExtractedData()
+	}()
 	// waiting the registry up
 	err=r.waitUtilHealthy()
 	if err != nil {
@@ -297,17 +307,6 @@ func (r *registry) Load(target string) error{
 	if err != nil {
 		return err
 	}
-
-	defer func() {
-		// stop the instance
-		fmt.Println("stop the instance")
-		err=r.Stop()
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		removeExtractedData()
-	}()
-
 
 	return nil
 }
